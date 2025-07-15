@@ -1,0 +1,30 @@
+
+services:
+  server1:
+    build:
+      context: ./server1
+    container_name: server1
+    ports:
+      - "3001:3000"
+    environment:
+      - PORT=3000
+
+  server2:
+    build:
+      context: ./server2
+    container_name: server2
+    ports:
+      - "3002:3000"
+    environment:
+      - PORT=3000
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-loadbalancer
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - server1
+      - server2
